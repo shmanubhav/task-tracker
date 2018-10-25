@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+      <h1>Task Tracker</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+    <%= if @current_user do %>
+    <%= link "My Tasks", to: Routes.task_path(@conn, :index), class: "btn btn-primary" %>
+    <% else %>
+    <%= link "Register", to: Routes.user_path(@conn, :new), class: "btn btn-primary" %>
+    <% end%>
+    </div>
+  </div>
+</div>
