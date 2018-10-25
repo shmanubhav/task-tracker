@@ -36,7 +36,8 @@ defmodule TaskTrackerWeb.TaskController do
   def show(conn, %{"id" => id}) do
     task = Tasks.get_task!(id)
     users = Users.list_users
-    render(conn, "show.html", task: task, users: users)
+    timeblock = TimeBlocks.get_timeblock_for_taskid(id)
+    render(conn, "show.html", task: task, users: users, timeblock: timeblock)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -60,13 +61,17 @@ defmodule TaskTrackerWeb.TaskController do
           |> put_flash(:info, "Timeblock creation error.")
       end
     end
-    time_in = get_naive_date(task_params[:timeblock][:start])
-    time_out = get_naive_date(task_params[:timeblock][:end])
-    timeblock = TimeBlocks.change_time_block(%TimeBlock{task_id: id, start: time_in, end: time_out})
-    IO.inspect(task_params)
-    # task_params = %{task_params | timeblock: timeblock}
-    Map.put(task_params, :timeblock, timeblock)
-    IO.inspect(task_params)
+    if Map.has_key?(task_params, "timeblock") do
+      start_time = Map.fetch!(Map.fetch!(task_params, "timeblock"), "start")
+      end_time = Map.fetch!(Map.fetch!(task_params, "timeblock"), "end")
+      time_in = get_naive_date(start_time)
+      time_out = get_naive_date(end_time)
+      timeblock = TimeBlocks.change_time_block(%TimeBlock{task_id: id, start:   time_in, end: time_out})
+      IO.inspect(task_params)
+      # task_params = %{task_params | timeblock: timeblock}
+      task_params = Map.put(task_params, "timeblock", timeblock)
+      IO.inspect(task_params)
+    end
     case Tasks.update_task(task, task_params) do
       {:ok, task} ->
         conn
@@ -89,6 +94,7 @@ defmodule TaskTrackerWeb.TaskController do
   end
 
   def get_naive_date(date_params) do
+    date_params = Map.new(date_params, fn {k,v} -> {String.to_atom(k), String.to_integer(v)} end)
     case NaiveDateTime.new(date_params[:year], date_params[:month], date_params[:day], date_params[:hour], date_params[:minute], 0) do
       {:ok, naivedate} ->
         naivedate

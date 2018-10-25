@@ -31,6 +31,12 @@
     <% end %>
   </li>
 
+  <%= if @timeblock do %>
+  <li>
+    <strong>Start Time:</strong>
+    <%= get_date_string(@timeblock.start) %>
+  </li>
+  <% end %>
 </ul>
 
 <span><%= link "Edit", to: Routes.task_path(@conn, :edit, @task) %></span>
