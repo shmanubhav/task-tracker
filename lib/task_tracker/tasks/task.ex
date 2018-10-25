@@ -8,6 +8,7 @@ defmodule TaskTracker.Tasks.Task do
     field :description, :string
     field :title, :string
     belongs_to :user, TaskTracker.Users.User
+    has_one :timeblock, TaskTracker.TimeBlocks.TimeBlock
 
     timestamps()
   end

@@ -10,6 +10,13 @@ defmodule TaskTrackerWeb.Router do
     plug TaskTrackerWeb.Plugs.FetchSession
   end
 
+  pipeline :ajax do
+    plug :accepts, ["json"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug TaskTrackerWeb.Plugs.FetchSession
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -24,7 +31,8 @@ defmodule TaskTrackerWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", TaskTrackerWeb do
-  #   pipe_through :api
-  # end
+  scope "/ajax", TaskTrackerWeb do
+    pipe_through :ajax
+    resources "/timeblocks", TimeBlockController, except: [:new, :edit]
+  end
 end

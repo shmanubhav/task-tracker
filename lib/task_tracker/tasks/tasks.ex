@@ -20,6 +20,7 @@ defmodule TaskTracker.Tasks do
   def list_tasks do
     Repo.all(Task)
     |> Repo.preload(:user)
+    |> Repo.preload(:timeblock)
   end
 
   @doc """
@@ -41,6 +42,7 @@ defmodule TaskTracker.Tasks do
   def get_task!(id) do
     Repo.get!(Task, id)
     |> Repo.preload(:user)
+    |> Repo.preload(:timeblock)
   end
   @doc """
   Creates a task.

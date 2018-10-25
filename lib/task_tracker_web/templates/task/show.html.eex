@@ -23,8 +23,8 @@
 
   <li>
     <%= if @task.user == nil do %>
-      <strong>Assign To:</strong>
-      <%= @task.user %>
+      <strong>Assigned To:</strong>
+      Not Assigned
     <% else %>
       <strong>Assigned To:</strong>
       <%= @task.user.name %>

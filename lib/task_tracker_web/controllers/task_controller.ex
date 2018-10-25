@@ -4,6 +4,8 @@ defmodule TaskTrackerWeb.TaskController do
   alias TaskTracker.Tasks
   alias TaskTracker.Tasks.Task
   alias TaskTracker.Users
+  alias TaskTracker.TimeBlocks
+  alias TaskTracker.TimeBlocks.TimeBlock
 
   def index(conn, _params) do
     tasks = Tasks.list_tasks()
@@ -46,7 +48,25 @@ defmodule TaskTrackerWeb.TaskController do
 
   def update(conn, %{"id" => id, "task" => task_params}) do
     task = Tasks.get_task!(id)
+    timeblock = TimeBlocks.get_timeblock_for_taskid(id)
+    if (timeblock == nil) do
+      case TimeBlocks.create_time_block(%{task_id: id}) do
+        {:ok, timeblock} ->
+          conn
+          |> put_flash(:info, "Timeblock created for this task.")
 
+        {:error, _ret} ->
+          conn
+          |> put_flash(:info, "Timeblock creation error.")
+      end
+    end
+    time_in = get_naive_date(task_params[:timeblock][:start])
+    time_out = get_naive_date(task_params[:timeblock][:end])
+    timeblock = TimeBlocks.change_time_block(%TimeBlock{task_id: id, start: time_in, end: time_out})
+    IO.inspect(task_params)
+    # task_params = %{task_params | timeblock: timeblock}
+    Map.put(task_params, :timeblock, timeblock)
+    IO.inspect(task_params)
     case Tasks.update_task(task, task_params) do
       {:ok, task} ->
         conn
@@ -66,5 +86,14 @@ defmodule TaskTrackerWeb.TaskController do
     conn
     |> put_flash(:info, "Task deleted successfully.")
     |> redirect(to: Routes.task_path(conn, :index))
+  end
+
+  def get_naive_date(date_params) do
+    case NaiveDateTime.new(date_params[:year], date_params[:month], date_params[:day], date_params[:hour], date_params[:minute], 0) do
+      {:ok, naivedate} ->
+        naivedate
+      _ ->
+        {:error}
+    end
   end
 end
