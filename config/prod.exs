@@ -12,7 +12,7 @@ use Mix.Config
 config :task_tracker, TaskTrackerWeb.Endpoint,
   server: true,
   root: ".",
-  version: Application.spec(:phoenix_distillery, :vsn)
+  version: Application.spec(:phoenix_distillery, :vsn),
   http: [:inet6, port: System.get_env("PORT") || 4000],
   url: [host: "tasks2.pyxis.blue", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
