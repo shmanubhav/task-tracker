@@ -66,9 +66,10 @@ defmodule TaskTrackerWeb.TaskController do
     if Map.has_key?(task_params, "timeblock") do
       start_time = Map.fetch!(Map.fetch!(task_params, "timeblock"), "start")
       end_time = Map.fetch!(Map.fetch!(task_params, "timeblock"), "end")
-      time_in = get_naive_date(start_time)
-      time_out = get_naive_date(end_time)
-      timeblock = TimeBlocks.change_time_block(%TimeBlock{task_id: id, start:   time_in, end: time_out})
+      time_in = NaiveDateTime.to_string(get_naive_date(start_time))
+      time_out = NaiveDateTime.to_string(get_naive_date(end_time))
+      # timeblock = TimeBlocks.change_time_block(%TimeBlock{task_id: id, start:   time_in, end: time_out})
+      timeblock = %{task_id: id, start: time_in, end: time_out}
       IO.inspect(task_params)
       # task_params = %{task_params | timeblock: timeblock}
       task_params = Map.put(task_params, "timeblock", timeblock)

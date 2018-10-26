@@ -24,7 +24,7 @@ defmodule TaskTracker.Users do
 
   def list_users(id) do
     Repo.all from u in User,
-    where: u.manager_id == ^id,
+    where: u.manager_id == ^id or u.id == ^id,
     preload: [:manager]
   end
 
