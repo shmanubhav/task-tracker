@@ -21,7 +21,6 @@ use Mix.Releases.Config,
 # an environment's settings will override those of a release
 # when building in that environment, this combination of release
 # and environment configuration is called a profile
-
 get_secret = fn name ->
   base = Path.expand("~/.config/task_tracker")
   File.mkdir_p!(base)
