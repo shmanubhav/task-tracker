@@ -17,6 +17,12 @@
     <%= error_tag f, :email %>
   </div>
 
+  <div class="form-group">
+    <%= label f, :manager_id %>
+    <%= select f, :manager_id, Enum.map(@users, fn u -> {u.name, u.id} end) ++ [nil], class: "form-control" %>
+    <%= error_tag f, :manager_id %>
+  </div>
+
   <div>
     <%= submit "Register", class: "btn btn-primary" %>
   </div>

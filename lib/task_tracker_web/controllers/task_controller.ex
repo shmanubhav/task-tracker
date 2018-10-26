@@ -17,7 +17,8 @@ defmodule TaskTrackerWeb.TaskController do
 
   def new(conn, _params) do
     changeset = Tasks.change_task(%Task{})
-    users = Users.list_users
+    user_id = get_session(conn, :user_id)
+    users = Users.list_users(user_id)
     render(conn, "new.html", users: users, changeset: changeset)
   end
 
@@ -43,7 +44,8 @@ defmodule TaskTrackerWeb.TaskController do
   def edit(conn, %{"id" => id}) do
     task = Tasks.get_task!(id)
     changeset = Tasks.change_task(task)
-    users = Users.list_users
+    user_id = get_session(conn, :user_id)
+    users = Users.list_users(user_id)
     render(conn, "edit.html", task: task, changeset: changeset, users: users)
   end
 

@@ -1,11 +1,11 @@
 <h1>Listing Users</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Name</th>
       <th>Email</th>
-
+      <th>Manager</th>
       <th></th>
     </tr>
   </thead>
@@ -14,7 +14,11 @@
     <tr>
       <td><%= user.name %></td>
       <td><%= user.email %></td>
-
+      <%= if user.manager do %>
+        <td><%= user.manager.name %></td>
+      <% else %>
+        <td>No Manager</td>
+      <% end %>
       <td>
         <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
         <%= link "Edit", to: Routes.user_path(@conn, :edit, user) %>

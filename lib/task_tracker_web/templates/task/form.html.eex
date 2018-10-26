@@ -67,7 +67,7 @@
 
   <div class="form-group">
     <%= label f, :user_id %>
-    <%= select f, :user_id, Enum.map(@users, fn u -> {u.name, u.id} end) ++ [nil], class: "form-control" %>
+    <%= select f, :user_id, (Enum.map(@users, fn u -> {u.name, u.id} end) ++ [nil]), class: "form-control" %>
     <%= error_tag f, :user_id %>
   </div>
 
