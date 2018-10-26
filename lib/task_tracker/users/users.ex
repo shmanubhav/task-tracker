@@ -28,6 +28,12 @@ defmodule TaskTracker.Users do
     preload: [:manager]
   end
 
+  def list_underlings(id) do
+    Repo.all from u in User,
+    where: u.manager_id == ^id,
+    preload: [:manager]
+  end
+
   @doc """
   Gets a single user.
 

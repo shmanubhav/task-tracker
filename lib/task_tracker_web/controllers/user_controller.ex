@@ -28,8 +28,9 @@ defmodule TaskTrackerWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
+    users = Users.list_underlings(id)
     user = Users.get_user(id)
-    render(conn, "show.html", user: user)
+    render(conn, "show.html", user: user, users: users)
   end
 
   def edit(conn, %{"id" => id}) do

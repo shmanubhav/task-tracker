@@ -21,6 +21,33 @@
     <% end %>
   </li>
 
+  <%= if length(@users) == 0 do %>
+  <li>
+    <strong>Underlings:</strong>
+    No Underlings
+  </li>
+  <% end %>
+
+  <br>
+
+  <%= if length(@users) != 0 do %>
+    <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Underlings</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+    <%= for user <- @users do %>
+      <tr>
+        <td><%= user.name %></td>
+      </tr>
+    <%= end %>
+    </table>
+  <% end %>
 </ul>
 
 <span><%= link "Edit", to: Routes.user_path(@conn, :edit, @user) %></span>
